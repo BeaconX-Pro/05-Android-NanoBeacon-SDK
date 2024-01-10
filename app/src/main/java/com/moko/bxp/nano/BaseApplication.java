@@ -24,9 +24,9 @@ import java.io.Writer;
 
 public class BaseApplication extends Application {
 
-    private static final String TAG = "BXP-NANO";
-    private static final String LOG_FILE = "BXP-NANO.txt";
-    private static final String LOG_FOLDER = "BXP-NANO";
+    private static final String TAG = "NanoBeacon";
+    private static final String LOG_FILE = "NanoBeacon.txt";
+    private static final String LOG_FOLDER = "NanoBeacon";
     public static String PATH_LOGCAT;
 
     @Override

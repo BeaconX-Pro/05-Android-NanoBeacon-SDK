@@ -6,13 +6,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 
 import com.elvishew.xlog.XLog;
 import com.moko.bxp.nano.R;
+import com.moko.bxp.nano.databinding.ActivityGuideBinding;
 import com.moko.bxp.nano.dialog.PermissionDialog;
 import com.moko.bxp.nano.utils.Utils;
 import com.permissionx.guolindev.PermissionX;
@@ -28,16 +28,19 @@ import androidx.core.content.ContextCompat;
  * @Description
  * @ClassPath com.moko.bxp.nano.activity.GuideActivity
  */
-public class GuideActivity extends BaseActivity {
+public class GuideActivity extends BaseActivity<ActivityGuideBinding> {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide);
+    protected void onCreate() {
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
         requestPermission();
+    }
+
+    @Override
+    protected ActivityGuideBinding getViewBinding() {
+        return ActivityGuideBinding.inflate(getLayoutInflater());
     }
 
     private void requestPermission() {

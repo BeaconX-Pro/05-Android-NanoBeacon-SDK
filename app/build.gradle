@@ -5,19 +5,18 @@ if (!isLibrary.toBoolean()) {
 }
 
 android {
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
         if (!isLibrary.toBoolean()) {
-            applicationId = "com.moko.bxp.nano"
+            applicationId "com.moko.bxp.nano"
         }
-        namespace = "com.moko.bxp.nano"
         minSdkVersion 18
         targetSdkVersion 33
-        versionCode 8
-        versionName "1.0.7"
+        versionCode 1
+        versionName "1.0.0"
         def formatDate = new Date().format("yyyyMMddHHmm")
-        setProperty("archivesBaseName", "BXP-NANO_${versionName}_${formatDate}")
+        setProperty("archivesBaseName", "NanoBeacon_${versionName}_${formatDate}")
     }
 
     buildTypes {
@@ -68,7 +67,7 @@ android {
                 // 修改aar名称
                 variant.outputs.all { output ->
                     def formatDate = new Date().format("yyyyMMddHHmm")
-                    outputFileName = "BXP-NANO_${android.defaultConfig.versionName}_${formatDate}.aar"
+                    outputFileName = "NanoBeacon_${android.defaultConfig.versionName}_${formatDate}.aar"
                 }
                 // 复制aar到指定目录
                 variant.assemble.doLast {

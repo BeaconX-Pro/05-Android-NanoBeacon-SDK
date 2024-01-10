@@ -2,39 +2,33 @@ package com.moko.bxp.nano.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.moko.bxp.nano.BaseApplication;
 import com.moko.bxp.nano.BuildConfig;
 import com.moko.bxp.nano.R;
-import com.moko.bxp.nano.R2;
+import com.moko.bxp.nano.databinding.ActivityAboutNanoBinding;
 import com.moko.bxp.nano.utils.ToastUtils;
 import com.moko.bxp.nano.utils.Utils;
 
 import java.io.File;
 import java.util.Calendar;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
+public class AboutActivity extends BaseActivity<ActivityAboutNanoBinding> {
 
-public class AboutActivity extends BaseActivity {
-    @BindView(R2.id.app_version)
-    TextView appVersion;
-    @BindView(R2.id.tv_feedback_log)
-    TextView tvFeedbackLog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-        ButterKnife.bind(this);
+    protected void onCreate() {
         if (!BuildConfig.IS_LIBRARY) {
-            appVersion.setText(String.format("APP Version:V%s", Utils.getVersionInfo(this)));
-            tvFeedbackLog.setVisibility(View.VISIBLE);
+            mBind.appVersion.setText(String.format("APP Version:V%s", Utils.getVersionInfo(this)));
+            mBind.tvFeedbackLog.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected ActivityAboutNanoBinding getViewBinding() {
+        return ActivityAboutNanoBinding.inflate(getLayoutInflater());
     }
 
 
@@ -53,15 +47,15 @@ public class AboutActivity extends BaseActivity {
     public void onFeedback(View view) {
         if (isWindowLocked())
             return;
-        File trackerLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "BXP-NANO.txt");
-        File trackerLogBak = new File(BaseApplication.PATH_LOGCAT + File.separator + "BXP-NANO.txt.bak");
+        File trackerLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "NanoBeacon.txt");
+        File trackerLogBak = new File(BaseApplication.PATH_LOGCAT + File.separator + "NanoBeacon.txt.bak");
         File trackerCrashLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "crash_log.txt");
         if (!trackerLog.exists() || !trackerLog.canRead()) {
             ToastUtils.showToast(this, "File is not exists!");
             return;
         }
         String address = "Development@mokotechnology.com";
-        StringBuilder mailContent = new StringBuilder("BXP-NANO_");
+        StringBuilder mailContent = new StringBuilder("NanoBeacon_");
         Calendar calendar = Calendar.getInstance();
         String date = Utils.calendar2strDate(calendar, "yyyyMMdd");
         mailContent.append(date);

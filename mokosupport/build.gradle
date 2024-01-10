@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
-        namespace = "com.moko.support.nano"
         minSdkVersion 18
         targetSdkVersion 33
         versionCode 4

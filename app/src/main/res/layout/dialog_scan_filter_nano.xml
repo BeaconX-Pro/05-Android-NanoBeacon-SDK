@@ -14,43 +14,33 @@
         android:orientation="vertical"
         android:padding="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BLE Name"
-            android:textColor="@color/text_black_4d4d4d"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/ll_filter_ble_name"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ll_filter_ble_name" />
-
         <LinearLayout
-            android:id="@+id/ll_filter_ble_name"
+            android:id="@+id/ll_filter_condition"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@drawable/shape_radius_blue_frame"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.75">
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/et_filter_name"
+                android:id="@+id/et_filter_condition"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.0"
                 android:background="@color/transparent"
                 android:gravity="center_vertical"
-                android:hint="1-20 characters"
-                android:maxLength="20"
+                android:hint="Mac address or Tag ID"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
                 android:textColorHint="@color/grey_ebebeb" />
 
             <ImageView
-                android:id="@+id/iv_filter_name_delete"
+                android:id="@+id/iv_filter_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="10dp"
@@ -59,52 +49,7 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MAC Addr"
-            android:textColor="@color/text_black_4d4d4d"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/ll_filter_mac_addr"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ll_filter_mac_addr" />
-
-        <LinearLayout
-            android:id="@+id/ll_filter_mac_addr"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape_radius_blue_frame"
-            android:gravity="center_vertical"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_filter_ble_name"
-            app:layout_constraintWidth_percent="0.75">
-
-            <EditText
-                android:id="@+id/et_filter_mac"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"
-                android:background="@color/transparent"
-                android:gravity="center_vertical"
-                android:hint="1-6bytes HEX"
-                android:digits="0123456789abcdefABCDEF"
-                android:maxLength="12"
-                android:paddingLeft="10dp"
-                android:singleLine="true"
-                android:textColorHint="@color/grey_ebebeb" />
-
-            <ImageView
-                android:id="@+id/iv_filter_mac_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/filter_delete" />
-        </LinearLayout>
-
-        <TextView
+            android:id="@+id/tv_rssi_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Min. RSSI"
@@ -121,8 +66,9 @@
             android:text="0dBm"
             android:textColor="@color/text_black_4d4d4d"
             android:textSize="15sp"
-            app:layout_constraintLeft_toLeftOf="@id/ll_filter_mac_addr"
-            app:layout_constraintTop_toBottomOf="@id/ll_filter_mac_addr" />
+            android:layout_marginLeft="20dp"
+            app:layout_constraintLeft_toRightOf="@id/tv_rssi_title"
+            app:layout_constraintTop_toBottomOf="@id/ll_filter_condition" />
 
         <LinearLayout
             android:id="@+id/ll_filter_rssi"

@@ -1,50 +1,34 @@
 package com.moko.bxp.nano.dialog;
 
-import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.EditText;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.moko.bxp.nano.R;
-import com.moko.bxp.nano.R2;
-
-import butterknife.BindView;
-import butterknife.OnClick;
+import com.moko.bxp.nano.databinding.DialogScanFilterNanoBinding;
 
 
-public class ScanFilterDialog extends BaseDialog {
-    @BindView(R2.id.et_filter_name)
-    EditText etFilterName;
-    @BindView(R2.id.et_filter_mac)
-    EditText etFilterMac;
-    @BindView(R2.id.tv_rssi)
-    TextView tvRssi;
-    @BindView(R2.id.sb_rssi)
-    SeekBar sbRssi;
+public class ScanFilterDialog extends MokoBaseDialog<DialogScanFilterNanoBinding> {
+    public static final String TAG = ScanFilterDialog.class.getSimpleName();
 
     private int filterRssi;
-    private String filterName;
-    private String filterMac;
+    private String filterCondition;
 
-    public ScanFilterDialog(Context context) {
-        super(context);
+    @Override
+    protected DialogScanFilterNanoBinding getViewBind(LayoutInflater inflater, ViewGroup container) {
+        return DialogScanFilterNanoBinding.inflate(inflater, container, false);
     }
 
     @Override
-    protected int getLayoutResId() {
-        return R.layout.dialog_scan_filter;
-    }
-
-    @Override
-    protected void renderConvertView(View convertView, Object o) {
-        tvRssi.setText(String.format("%sdBm", filterRssi + ""));
-        sbRssi.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    protected void onCreateView() {
+        mBind.tvRssi.setText(String.format("%sdBm", filterRssi + ""));
+        mBind.sbRssi.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 int rssi = (progress * -1);
-                tvRssi.setText(String.format("%sdBm", rssi + ""));
+                mBind.tvRssi.setText(String.format("%sdBm", rssi + ""));
                 filterRssi = rssi;
             }
 
@@ -58,32 +42,47 @@ public class ScanFilterDialog extends BaseDialog {
 
             }
         });
-        sbRssi.setProgress(Math.abs(filterRssi));
-        if (!TextUtils.isEmpty(filterName)) {
-            etFilterName.setText(filterName);
-            etFilterName.setSelection(filterName.length());
+        mBind.sbRssi.setProgress(Math.abs(filterRssi));
+        if (!TextUtils.isEmpty(filterCondition)) {
+            mBind.etFilterCondition.setText(filterCondition);
+            mBind.etFilterCondition.setSelection(filterCondition.length());
         }
-        if (!TextUtils.isEmpty(filterMac)) {
-            etFilterMac.setText(filterMac);
-            etFilterMac.setSelection(filterMac.length());
-        }
-        setDismissEnable(true);
+        mBind.ivFilterDelete.setOnClickListener(v -> mBind.etFilterCondition.setText(""));
+        mBind.tvDone.setOnClickListener(v -> {
+            listener.onDone(mBind.etFilterCondition.getText().toString(),
+                    filterRssi);
+            dismiss();
+        });
     }
 
-    @OnClick(R2.id.iv_filter_name_delete)
-    public void onFilterNameDete(View view) {
-        etFilterName.setText("");
+    @Override
+    public int getDialogStyle() {
+        return R.style.CenterDialog;
     }
 
-    @OnClick(R2.id.iv_filter_mac_delete)
-    public void onFilterMacDelete(View view) {
-        etFilterMac.setText("");
+    @Override
+    public int getGravity() {
+        return Gravity.CENTER;
     }
 
-    @OnClick(R2.id.tv_done)
-    public void onViewClicked(View view) {
-        listener.onDone(etFilterName.getText().toString(), etFilterMac.getText().toString(), filterRssi);
-        dismiss();
+    @Override
+    public String getFragmentTag() {
+        return TAG;
+    }
+
+    @Override
+    public float getDimAmount() {
+        return 0.7f;
+    }
+
+    @Override
+    public boolean getCancelOutside() {
+        return true;
+    }
+
+    @Override
+    public boolean getCancellable() {
+        return true;
     }
 
     private OnScanFilterListener listener;
@@ -92,19 +91,16 @@ public class ScanFilterDialog extends BaseDialog {
         this.listener = listener;
     }
 
-    public void setFilterName(String filterName) {
-        this.filterName = filterName;
+    public void setFilterCondition(String filterCondition) {
+        this.filterCondition = filterCondition;
     }
 
-    public void setFilterMac(String filterMac) {
-        this.filterMac = filterMac;
-    }
 
     public void setFilterRssi(int filterRssi) {
         this.filterRssi = filterRssi;
     }
 
     public interface OnScanFilterListener {
-        void onDone(String filterName, String filterMac, int filterRssi);
+        void onDone(String filterCondition, int filterRssi);
     }
 }

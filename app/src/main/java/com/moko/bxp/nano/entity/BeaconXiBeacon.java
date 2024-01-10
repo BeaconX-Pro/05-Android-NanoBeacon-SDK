@@ -9,5 +9,4 @@ public class BeaconXiBeacon implements Serializable {
     public String major;
     public String minor;
     public String distanceDesc;
-    public String txPower;
 }

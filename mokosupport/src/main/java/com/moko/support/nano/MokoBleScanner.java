@@ -77,13 +77,11 @@ public final class MokoBleScanner {
             if (result != null) {
                 BluetoothDevice device = result.getDevice();
                 byte[] scanRecord = result.getScanRecord().getBytes();
-                String name = result.getScanRecord().getDeviceName();
                 int rssi = result.getRssi();
                 if (scanRecord.length == 0 || rssi == 127) {
                     return;
                 }
                 DeviceInfo deviceInfo = new DeviceInfo();
-                deviceInfo.name = name;
                 deviceInfo.rssi = rssi;
                 deviceInfo.mac = device.getAddress();
                 String scanRecordStr = MokoUtils.bytesToHexString(scanRecord);
