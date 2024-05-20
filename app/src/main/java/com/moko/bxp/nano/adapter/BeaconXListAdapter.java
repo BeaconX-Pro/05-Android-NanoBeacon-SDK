@@ -14,21 +14,24 @@ import com.moko.bxp.nano.entity.BeaconXInfo;
 import com.moko.bxp.nano.entity.BeaconXTLM;
 import com.moko.bxp.nano.entity.BeaconXUID;
 import com.moko.bxp.nano.entity.BeaconXiBeacon;
-import com.moko.bxp.nano.entity.SensorInfo;
+import com.moko.bxp.nano.entity.NanoInfo;
 import com.moko.bxp.nano.utils.BeaconXParser;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+import androidx.core.content.ContextCompat;
+
 public class BeaconXListAdapter extends BaseQuickAdapter<BeaconXInfo, BaseViewHolder> {
+
     public BeaconXListAdapter() {
         super(R.layout.list_item_device_nano);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, BeaconXInfo item) {
-        helper.setText(R.id.tv_mac, item.mac);
-        helper.setText(R.id.tv_tag, TextUtils.isEmpty(item.tagId) ? "Tag ID:N/A" : String.format("Tag ID:0x%s", item.tagId));
+        helper.setText(R.id.tv_name, TextUtils.isEmpty(item.name) ? "N/A" : item.name);
+        helper.setText(R.id.tv_mac, String.format("MAC:%s", item.mac));
         helper.setText(R.id.tv_rssi, String.format("%ddBm", item.rssi));
         helper.setText(R.id.tv_interval_time, item.intervalTime == 0 ? "<->N/A" : String.format("<->%dms", item.intervalTime));
         helper.setText(R.id.tv_battery, item.battery < 0 ? "N/A" : String.format("%dmV", item.battery));
@@ -56,8 +59,9 @@ public class BeaconXListAdapter extends BaseQuickAdapter<BeaconXInfo, BaseViewHo
                 BeaconXiBeacon beaconXiBeacon = BeaconXParser.getiBeacon(item.rssi, validData.data);
                 parent.addView(createiBeaconView(beaconXiBeacon));
             }
-            if (validData.type == BeaconXInfo.VALID_DATA_FRAME_TYPE_SENSOR_INFO) {
-                parent.addView(createTagTempView(BeaconXParser.getSensorInfo(validData.data)));
+            if (validData.type == BeaconXInfo.VALID_DATA_FRAME_TYPE_NANO_INFO) {
+                NanoInfo nanoInfo = BeaconXParser.getNanoInfo(validData.data);
+                parent.addView(createNanoInfoView(nanoInfo, item.cutoffStatus == 1, item.btnAlarmStatus == 0));
             }
         }
     }
@@ -102,10 +106,18 @@ public class BeaconXListAdapter extends BaseQuickAdapter<BeaconXInfo, BaseViewHo
         return view;
     }
 
-    private View createTagTempView(SensorInfo sensorInfo) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_sensor, null);
+    private View createNanoInfoView(NanoInfo nanoInfo, boolean isCutoffTrigger, boolean isBtnAlarmTrigger) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_nano_info, null);
         TextView tv_temp = view.findViewById(R.id.tv_temp);
-        tv_temp.setText(sensorInfo.temperature);
+        tv_temp.setText(nanoInfo.temperature);
+        TextView tv_cutoff_status = view.findViewById(R.id.tv_cutoff_status);
+        tv_cutoff_status.setText(isCutoffTrigger ? "Triggered" : "Normal");
+        tv_cutoff_status.setTextColor(ContextCompat.getColor(mContext, isCutoffTrigger ? R.color.red_ff0000 : R.color.grey_666666));
+        TextView tv_button_alarm = view.findViewById(R.id.tv_button_alarm);
+        tv_button_alarm.setText(isBtnAlarmTrigger ? "Triggered" : "Normal");
+        tv_button_alarm.setTextColor(ContextCompat.getColor(mContext, isBtnAlarmTrigger ? R.color.red_ff0000 : R.color.grey_666666));
+        TextView tv_running_time = view.findViewById(R.id.tv_running_time);
+        tv_running_time.setText(nanoInfo.timeCounter);
         return view;
     }
 }

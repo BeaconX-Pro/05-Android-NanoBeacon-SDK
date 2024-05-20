@@ -1,12 +1,12 @@
 package com.moko.bxp.nano.utils;
 
-import android.text.TextUtils;
-
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.nano.entity.BeaconXTLM;
 import com.moko.bxp.nano.entity.BeaconXUID;
 import com.moko.bxp.nano.entity.BeaconXiBeacon;
-import com.moko.bxp.nano.entity.SensorInfo;
+import com.moko.bxp.nano.entity.NanoInfo;
+
+import java.util.Locale;
 
 
 public class BeaconXParser {
@@ -71,16 +71,22 @@ public class BeaconXParser {
         return iBeacon;
     }
 
-    public static SensorInfo getSensorInfo(String data) {
-        SensorInfo sensorInfo = new SensorInfo();
-        int temp = Integer.parseInt(data.substring(24, 28), 16);
-        if (temp != 0xFFFF) {
-            temp = temp >> 4;
-            String tempStr = MokoUtils.getDecimalFormat("0.#").format(temp * 0.0625f);
-            sensorInfo.temperature = String.format("%s°C", tempStr);
-        } else {
-            sensorInfo.temperature = String.format("%s°C", "N/A");
-        }
-        return sensorInfo;
+    public static NanoInfo getNanoInfo(String data) {
+        NanoInfo nanoInfo = new NanoInfo();
+        int advType = Integer.parseInt(data.substring(0, 2), 16);
+        nanoInfo.advType = advType;
+        int temp = Integer.parseInt(data.substring(6, 8) + data.substring(4, 6), 16);
+        String tempStr = MokoUtils.getDecimalFormat("0.#").format(temp * 0.01f);
+        nanoInfo.temperature = String.format("%s°C", tempStr);
+        int timeCounter = Integer.parseInt(data.substring(14, 16) + data.substring(12, 14) + data.substring(10, 12) + data.substring(8, 10), 16);
+        int day = 0, hours = 0, minutes = 0;
+        day = (timeCounter / (60 * 60 * 24));
+        timeCounter -= day * 60 * 60 * 24;
+        hours = (timeCounter / (60 * 60));
+        timeCounter -= hours * 60 * 60;
+        minutes = (timeCounter / 60);
+        timeCounter -= minutes * 60;
+        nanoInfo.timeCounter = String.format(Locale.getDefault(), "%dd%dh%dm%ds", day, hours, minutes, timeCounter);
+        return nanoInfo;
     }
 }

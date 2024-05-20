@@ -27,6 +27,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_SLOT_DATA = 100;
     public static final int REQUEST_CODE_ENABLE_BT = 1001;
     public static final int REQUEST_CODE_QUICK_SWITCH = 1002;
+    public static final int REQUEST_CODE_SCAN_MAC = 1003;
 
 
     public static final int REQUEST_CODE_PERMISSION = 120;

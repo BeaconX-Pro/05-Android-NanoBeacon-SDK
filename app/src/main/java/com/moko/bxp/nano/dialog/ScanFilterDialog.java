@@ -53,6 +53,9 @@ public class ScanFilterDialog extends MokoBaseDialog<DialogScanFilterNanoBinding
                     filterRssi);
             dismiss();
         });
+        mBind.ivScanMac.setOnClickListener(v -> {
+            listener.onScanMac();
+        });
     }
 
     @Override
@@ -93,6 +96,10 @@ public class ScanFilterDialog extends MokoBaseDialog<DialogScanFilterNanoBinding
 
     public void setFilterCondition(String filterCondition) {
         this.filterCondition = filterCondition;
+        if (mBind != null) {
+            mBind.etFilterCondition.setText(filterCondition);
+            mBind.etFilterCondition.setSelection(filterCondition.length());
+        }
     }
 
 
@@ -102,5 +109,7 @@ public class ScanFilterDialog extends MokoBaseDialog<DialogScanFilterNanoBinding
 
     public interface OnScanFilterListener {
         void onDone(String filterCondition, int filterRssi);
+
+        void onScanMac();
     }
 }

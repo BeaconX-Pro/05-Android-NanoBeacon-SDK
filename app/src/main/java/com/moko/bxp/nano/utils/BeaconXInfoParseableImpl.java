@@ -4,12 +4,12 @@ import android.os.ParcelUuid;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
+import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.nano.entity.BeaconXInfo;
 import com.moko.support.nano.entity.DeviceInfo;
 import com.moko.support.nano.service.DeviceInfoParseable;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,17 +33,31 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
         boolean isEddystone = false;
         boolean isBeacon = false;
         boolean isSensorInfo = false;
+        boolean isNanoBeaconInfo = false;
         byte[] values = null;
         int type = -1;
-        String tagId = "";
+        int advType = 0;
+        int btnAlarmStatus = 0;
+        int cutoffStatus = 0;
+        String name = "";
         if (null == record) return null;
         Map<ParcelUuid, byte[]> map = record.getServiceData();
-        byte[] manufacturerBytes = record.getManufacturerSpecificData(0x004C);
-        if (null != manufacturerBytes && manufacturerBytes.length == 23) {
+        byte[] iBeaconBytes = record.getManufacturerSpecificData(0x004C);
+        if (null != iBeaconBytes && iBeaconBytes.length == 23) {
             isBeacon = true;
-//            if (manufacturerBytes.length != 23) return null;
             type = BeaconXInfo.VALID_DATA_FRAME_TYPE_IBEACON_APPLE;
+            values = iBeaconBytes;
+        }
+        byte[] manufacturerBytes = record.getManufacturerSpecificData(0x0505);
+        if (null != manufacturerBytes && manufacturerBytes.length == 15) {
+            isNanoBeaconInfo = true;
+            type = BeaconXInfo.VALID_DATA_FRAME_TYPE_NANO_INFO;
             values = manufacturerBytes;
+            advType = values[0] & 0xFF;
+            btnAlarmStatus = (values[8] >> 4) & 0x01;
+            cutoffStatus = (values[8] >> 5) & 0x01;
+            battery = (int) ((values[1] & 0xFF) * 31.25f);
+            name = record.getDeviceName();
         }
         if (map != null && !map.isEmpty()) {
             Iterator iterator = map.keySet().iterator();
@@ -69,33 +83,18 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
                         }
                     }
                     values = bytes;
-                } else if (parcelUuid.toString().startsWith("0000ea01")) {
-                    isSensorInfo = true;
-                    byte[] bytes = map.get(parcelUuid);
-                    if (bytes != null) {
-                        switch (bytes[0] & 0xff) {
-                            case BeaconXInfo.VALID_DATA_FRAME_TYPE_SENSOR_INFO:
-                                if (bytes.length < 19)
-                                    return null;
-                                type = BeaconXInfo.VALID_DATA_FRAME_TYPE_SENSOR_INFO;
-                                battery = MokoUtils.toInt(Arrays.copyOfRange(bytes, 16, 18));
-                                tagId = MokoUtils.bytesToHexString(Arrays.copyOfRange(bytes, 18, bytes.length));
-                                break;
-                        }
-                    }
-                    values = bytes;
                 }
             }
         }
-        if ((!isEddystone && !isBeacon && !isSensorInfo) || values == null || type == -1) {
+        if ((!isEddystone && !isBeacon && !isSensorInfo && !isNanoBeaconInfo) || values == null || type == -1) {
             return null;
         }
         // avoid repeat
         BeaconXInfo beaconXInfo;
         if (beaconXInfoHashMap.containsKey(deviceInfo.mac)) {
             beaconXInfo = beaconXInfoHashMap.get(deviceInfo.mac);
-            if (!TextUtils.isEmpty(tagId))
-                beaconXInfo.tagId = tagId;
+            if (!TextUtils.isEmpty(name))
+                beaconXInfo.name = name;
             beaconXInfo.rssi = deviceInfo.rssi;
             if (battery >= 0) {
                 beaconXInfo.battery = battery;
@@ -105,9 +104,17 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
             long intervalTime = currentTime - beaconXInfo.scanTime;
             beaconXInfo.intervalTime = intervalTime;
             beaconXInfo.scanTime = currentTime;
+            if (type == BeaconXInfo.VALID_DATA_FRAME_TYPE_NANO_INFO) {
+//                beaconXInfo.triggerStatus = (advType | beaconXInfo.lastAdvType);
+                beaconXInfo.btnAlarmStatus = (btnAlarmStatus & beaconXInfo.lastBtnAlarmStatus);
+                beaconXInfo.cutoffStatus = (cutoffStatus | beaconXInfo.lastCutoffStatus);
+//                beaconXInfo.lastAdvType = advType;
+                beaconXInfo.lastBtnAlarmStatus = btnAlarmStatus;
+                beaconXInfo.lastCutoffStatus = cutoffStatus;
+            }
         } else {
             beaconXInfo = new BeaconXInfo();
-            beaconXInfo.tagId = tagId;
+            beaconXInfo.name = name;
             beaconXInfo.mac = deviceInfo.mac;
             beaconXInfo.rssi = deviceInfo.rssi;
             if (battery < 0) {
@@ -117,6 +124,11 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
             }
             beaconXInfo.scanRecord = deviceInfo.scanRecord;
             beaconXInfo.scanTime = SystemClock.elapsedRealtime();
+            if (type == BeaconXInfo.VALID_DATA_FRAME_TYPE_NANO_INFO) {
+//                beaconXInfo.lastAdvType = advType;
+                beaconXInfo.lastBtnAlarmStatus = btnAlarmStatus;
+                beaconXInfo.lastCutoffStatus = cutoffStatus;
+            }
             beaconXInfo.validDataHashMap = new HashMap<>();
             beaconXInfoHashMap.put(deviceInfo.mac, beaconXInfo);
         }
@@ -126,11 +138,8 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
         validData.type = type;
 
         // 广播帧有可变值以TYPE为KEY更新
-        if (type == BeaconXInfo.VALID_DATA_FRAME_TYPE_TLM) {
-            beaconXInfo.validDataHashMap.put(type + "", validData);
-            return beaconXInfo;
-        }
-        if (type == BeaconXInfo.VALID_DATA_FRAME_TYPE_SENSOR_INFO) {
+        if (type == BeaconXInfo.VALID_DATA_FRAME_TYPE_TLM
+                || type == BeaconXInfo.VALID_DATA_FRAME_TYPE_NANO_INFO) {
             beaconXInfo.validDataHashMap.put(type + "", validData);
             return beaconXInfo;
         }
