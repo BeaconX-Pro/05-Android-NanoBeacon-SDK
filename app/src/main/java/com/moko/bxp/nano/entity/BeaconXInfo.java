@@ -21,9 +21,9 @@ public class BeaconXInfo implements Serializable {
 //    public int lastAdvType;
 //    public int triggerStatus;
     public int lastCutoffStatus;
-    public int cutoffStatus;
+    public int cutoffStatus = 0;
     public int lastBtnAlarmStatus;
-    public int btnAlarmStatus;
+    public int btnAlarmStatus = 1;
     public HashMap<String, ValidData> validDataHashMap;
 
     @Override

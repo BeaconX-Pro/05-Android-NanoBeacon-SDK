@@ -37,7 +37,7 @@ public class BeaconXInfoParseableImpl implements DeviceInfoParseable<BeaconXInfo
         byte[] values = null;
         int type = -1;
         int advType = 0;
-        int btnAlarmStatus = 0;
+        int btnAlarmStatus = 1;
         int cutoffStatus = 0;
         String name = "";
         if (null == record) return null;
