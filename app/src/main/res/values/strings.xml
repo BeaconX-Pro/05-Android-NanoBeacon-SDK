@@ -50,7 +50,7 @@
     <string name="trigger_moved_tips_2">*The Beacon will %1$s after device keep static for %2$s and it %3$s again once a movement occurred.</string>
     <string name="trigger_light_detected_tips_1">*The Beacon will start and keep advertising after ambient light detected.</string>
     <string name="trigger_light_detected_tips_2">*The Beacon will %1$s after device detected ambient light continuously for %2$s.</string>
-    <string name="rssi_filter_tips">* RSSI filtering is the highest priority filtering condition. \nFilter Address filtering must first meet the RSSI filtering condition.\n\n* MAC address filtering Supports fuzzy query filtering. You can fill in part or all of the hexadecimal character strings of the MAC address, and do not need to enter the ":" of the MAC address character string.</string>
+    <string name="rssi_filter_tips_nano">* RSSI filtering is the highest priority filtering condition. \nFilter Address filtering must first meet the RSSI filtering condition.\n\n* MAC address filtering Supports fuzzy query filtering. You can fill in part or all of the hexadecimal character strings of the MAC address, and do not need to enter the ":" of the MAC address character string.</string>
     <string name="th_chart_total">Total Data Points:%d</string>
     <string name="th_chart_display">Window Display Points:%d</string>
     <string name="temperature_humidity"><![CDATA[Temperature&Humidity]]></string>
