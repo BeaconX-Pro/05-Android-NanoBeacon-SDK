@@ -15,7 +15,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 33
         versionCode 3
-        versionName "1.0.2"
+        versionName "1.0.3"
         def formatDate = new Date().format("yyyyMMddHHmm")
         setProperty("archivesBaseName", "NanoBeacon_${versionName}_${formatDate}")
     }
