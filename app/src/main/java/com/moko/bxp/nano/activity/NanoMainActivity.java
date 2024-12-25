@@ -56,8 +56,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 public class NanoMainActivity extends BaseActivity<ActivityMainNanoBinding> implements MokoScanDeviceCallback {
-
-
     private boolean mReceiverTag = false;
     private ConcurrentHashMap<String, BeaconXInfo> beaconXInfoHashMap;
     private ArrayList<BeaconXInfo> beaconXInfos;
