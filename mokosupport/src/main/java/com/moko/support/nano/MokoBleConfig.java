@@ -6,16 +6,11 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 
-import com.elvishew.xlog.XLog;
+import androidx.annotation.NonNull;
+
 import com.moko.ble.lib.MokoBleManager;
 import com.moko.ble.lib.callback.MokoResponseCallback;
-import com.moko.ble.lib.utils.MokoUtils;
-import com.moko.support.nano.entity.OrderCHAR;
 import com.moko.support.nano.entity.OrderServices;
-
-import java.util.UUID;
-
-import androidx.annotation.NonNull;
 
 final class MokoBleConfig extends MokoBleManager {
 
@@ -27,12 +22,9 @@ final class MokoBleConfig extends MokoBleManager {
     }
 
     @Override
-    public boolean init(BluetoothGatt gatt) {
-        final BluetoothGattService service = gatt.getService(OrderServices.SERVICE_CUSTOM.getUuid());
-        if (service != null) {
-            return true;
-        }
-        return false;
+    public boolean checkServiceCharacteristicSupported(BluetoothGatt bluetoothGatt) {
+        final BluetoothGattService service = bluetoothGatt.getService(OrderServices.SERVICE_CUSTOM.getUuid());
+        return service != null;
     }
 
     @Override
@@ -46,7 +38,8 @@ final class MokoBleConfig extends MokoBleManager {
     }
 
     @Override
-    public void discovered(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+    public void init() {
+
     }
 
     @Override
