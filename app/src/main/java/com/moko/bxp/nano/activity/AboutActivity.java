@@ -47,9 +47,9 @@ public class AboutActivity extends BaseActivity<ActivityAboutNanoBinding> {
     public void onFeedback(View view) {
         if (isWindowLocked())
             return;
-        File trackerLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "NanoBeacon.txt");
-        File trackerLogBak = new File(BaseApplication.PATH_LOGCAT + File.separator + "NanoBeacon.txt.bak");
-        File trackerCrashLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "crash_log.txt");
+        File trackerLog = new File(NanoMainActivity.PATH_LOGCAT + File.separator + "NanoBeacon.txt");
+        File trackerLogBak = new File(NanoMainActivity.PATH_LOGCAT + File.separator + "NanoBeacon.txt.bak");
+        File trackerCrashLog = new File(NanoMainActivity.PATH_LOGCAT + File.separator + "crash_log.txt");
         if (!trackerLog.exists() || !trackerLog.canRead()) {
             ToastUtils.showToast(this, "File is not exists!");
             return;

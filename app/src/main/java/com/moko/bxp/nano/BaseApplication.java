@@ -27,7 +27,7 @@ public class BaseApplication extends Application {
     private static final String TAG = "NanoBeacon";
     private static final String LOG_FILE = "NanoBeacon.txt";
     private static final String LOG_FOLDER = "NanoBeacon";
-    public static String PATH_LOGCAT;
+    private static String PATH_LOGCAT;
 
     @Override
     public void onCreate() {

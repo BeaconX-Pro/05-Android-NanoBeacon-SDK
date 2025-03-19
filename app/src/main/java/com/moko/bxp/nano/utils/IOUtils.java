@@ -13,6 +13,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
 import com.elvishew.xlog.XLog;
+import com.moko.bxp.nano.BuildConfig;
 import com.moko.bxp.nano.activity.NanoMainActivity;
 
 import java.io.File;
@@ -225,7 +226,7 @@ public class IOUtils {
         values.put(MediaStore.DownloadColumns.DISPLAY_NAME, file.getName());
         values.put(MediaStore.DownloadColumns.TITLE, file.getName());
         values.put(MediaStore.DownloadColumns.MIME_TYPE, "*/*");
-        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, "Download/NanoBeacon");
+        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, BuildConfig.IS_LIBRARY ? "Download/mokoBeaconXPro" : "Download/NanoBeacon");
         Uri external = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
         Uri uri = null;
         ContentResolver cr = context.getContentResolver();

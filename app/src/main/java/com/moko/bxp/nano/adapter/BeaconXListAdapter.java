@@ -67,7 +67,7 @@ public class BeaconXListAdapter extends BaseQuickAdapter<BeaconXInfo, BaseViewHo
     }
 
     private View createUIDView(BeaconXUID uid) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_uid, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_uid_nano, null);
         TextView tvRSSI0M = view.findViewById(R.id.tv_rssi_0m);
         TextView tvNameSpace = view.findViewById(R.id.tv_namespace);
         TextView tvInstanceId = view.findViewById(R.id.tv_instance_id);
@@ -78,7 +78,7 @@ public class BeaconXListAdapter extends BaseQuickAdapter<BeaconXInfo, BaseViewHo
     }
 
     private View createTLMView(BeaconXTLM tlm) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_tlm, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.beaconx_tlm_nano, null);
         TextView tv_vbatt = view.findViewById(R.id.tv_vbatt);
         TextView tv_temp = view.findViewById(R.id.tv_temp);
         TextView tv_adv_cnt = view.findViewById(R.id.tv_adv_cnt);
