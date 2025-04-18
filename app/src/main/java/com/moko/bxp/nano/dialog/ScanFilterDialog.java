@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 
 import com.moko.bxp.nano.R;
 import com.moko.bxp.nano.databinding.DialogScanFilterNanoBinding;
+import com.moko.lib.bxpui.dialog.MokoBaseDialog;
 
 
 public class ScanFilterDialog extends MokoBaseDialog<DialogScanFilterNanoBinding> {
