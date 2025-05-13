@@ -5,7 +5,7 @@
     <!-- 要求当前设备必须要有NFC芯片 -->
     <uses-feature
         android:name="android.hardware.nfc"
-        android:required="true" />
+        android:required="false" />
     <application
         android:name="com.moko.bxp.nano.BaseApplication"
         android:allowBackup="true"
