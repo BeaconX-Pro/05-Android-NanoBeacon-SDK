@@ -4,7 +4,6 @@ import android.os.ParcelUuid;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
-import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.nano.entity.BeaconXInfo;
 import com.moko.support.nano.entity.DeviceInfo;

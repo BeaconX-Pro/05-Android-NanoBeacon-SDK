@@ -3,8 +3,6 @@ package com.moko.support.nano;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.support.nano.callback.MokoScanDeviceCallback;
 import com.moko.support.nano.entity.DeviceInfo;
@@ -12,6 +10,7 @@ import com.moko.support.nano.entity.DeviceInfo;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;

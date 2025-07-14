@@ -15,8 +15,6 @@ import android.provider.Settings;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import static com.moko.ble.lib.utils.MokoUtils.bytesToHexString;
-
 public class NfcUtils {
 
     //nfc

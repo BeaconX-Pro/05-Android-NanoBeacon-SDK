@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
-import com.moko.bxp.nano.BaseApplication;
 import com.moko.bxp.nano.BuildConfig;
 import com.moko.bxp.nano.R;
 import com.moko.bxp.nano.databinding.ActivityAboutNanoBinding;
