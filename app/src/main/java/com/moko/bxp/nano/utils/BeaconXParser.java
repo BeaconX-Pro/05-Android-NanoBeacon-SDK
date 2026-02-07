@@ -75,7 +75,7 @@ public class BeaconXParser {
         NanoInfo nanoInfo = new NanoInfo();
         int advType = Integer.parseInt(data.substring(0, 2), 16);
         nanoInfo.advType = advType;
-        int temp = Integer.parseInt(data.substring(6, 8) + data.substring(4, 6), 16);
+        int temp = MokoUtils.toIntSigned(MokoUtils.hex2bytes(data.substring(6, 8) + data.substring(4, 6)));
         String tempStr = MokoUtils.getDecimalFormat("0.#").format(temp * 0.01f);
         nanoInfo.temperature = String.format("%s°C", tempStr);
         int timeCounter = Integer.parseInt(data.substring(14, 16) + data.substring(12, 14) + data.substring(10, 12) + data.substring(8, 10), 16);
